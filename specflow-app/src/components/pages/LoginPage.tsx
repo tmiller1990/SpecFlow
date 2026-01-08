@@ -118,7 +118,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onAnonymousLogin, isLoadin
 
                 {/* Additional Info */}
                 <div className="mt-4 md:mt-6 text-center text-white text-xs md:text-sm">
-                    <p>Get back to <a href="https://Ty.lerMiller.com">my homepage</a></p>
+                    <p>Get back to <a href="https://Ty.lerMiller.com">Ty.lerMiller.com</a></p>
                 </div>
             </div>
         </div>
