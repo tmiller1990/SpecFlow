@@ -21,7 +21,7 @@ export const ProjectView: React.FC<ProjectViewProps> = ({ projectId, onBack }) =
     const [showNewCardForm, setShowNewCardForm] = useState(false);
     const [activeTab, setActiveTab] = useState<'decisions' | 'specs'>('decisions');
 
-    const canCreateCard = user?.role === 'designer' || user?.role === 'gc';
+    const canCreateCard = user?.role === 'designer';
 
     useEffect(() => {
         if (!projectId) {

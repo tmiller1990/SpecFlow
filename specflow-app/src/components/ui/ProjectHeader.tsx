@@ -15,7 +15,7 @@ export const ProjectHeader: React.FC<ProjectHeaderProps> = ({ project }) => {
     const costColor = project.runningCostDelta >= 0 ? 'text-green-600' : 'text-red-600';
 
     return (
-        <div className="bg-white p-4 md:p-6 rounded-xl shadow-lg border border-gray-100 mb-6 md:mb-8">
+        <div className="bg-white bg-opacity-95 backdrop-blur-sm p-4 md:p-6 rounded-2xl shadow-xl border border-white/20 mb-6 md:mb-8">
             <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 md:gap-0">
                 <div>
                     <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900">{project.name}</h1>

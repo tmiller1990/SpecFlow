@@ -78,9 +78,9 @@ const App = () => {
 
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-gray-50">
-                <Loader2 className="w-8 h-8 mr-2 animate-spin text-indigo-500" />
-                <span className="text-lg font-medium text-gray-700">Connecting to Firebase...</span>
+            <div className="flex items-center justify-center min-h-screen bg-linear-to-br from-indigo-600 via-indigo-500 to-blue-600">
+                <Loader2 className="w-8 h-8 mr-2 animate-spin text-white" />
+                <span className="text-lg font-medium text-white">Connecting to Firebase...</span>
             </div>
         );
     }
@@ -142,20 +142,26 @@ const App = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 font-sans">
-            <header className="sticky top-0 z-20 bg-white shadow-md">
-                <div className="max-w-7xl mx-auto flex justify-between items-center p-3 md:p-4">
-                    <h1 className="text-xl md:text-2xl font-extrabold text-indigo-600">SpecFlow</h1>
+        <div className="min-h-screen bg-linear-to-br from-indigo-600 via-indigo-500 to-blue-600 font-sans">
+            {/* Background decoration */}
+            <div className="fixed inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute -top-40 -right-40 w-80 h-80 bg-white opacity-5 rounded-full blur-3xl"></div>
+                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-white opacity-5 rounded-full blur-3xl"></div>
+            </div>
+
+            <header className="sticky top-0 z-20 bg-white bg-opacity-95 shadow-md backdrop-blur-sm">
+                <div className="max-w-6xl mx-auto px-3 md:px-4 py-3 md:py-4 flex items-center gap-4">
+                    <h1 className="text-xl md:text-2xl font-extrabold bg-linear-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent flex-shrink-0">SpecFlow</h1>
                     
                     {/* Desktop Navigation */}
-                    <div className="hidden md:block flex-1">
+                    <div className="hidden md:block ml-auto">
                         {navigationControls}
                     </div>
 
                     {/* Mobile Menu Button */}
                     <button
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                        className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                        className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0"
                     >
                         {mobileMenuOpen ? (
                             <X className="w-6 h-6 text-gray-700" />
@@ -172,7 +178,7 @@ const App = () => {
                     </div>
                 )}
             </header>
-            <main className="max-w-7xl mx-auto pb-12 px-4 md:px-0">
+            <main className="relative z-10 max-w-6xl mx-auto pb-12 px-4 md:px-0">
                 {content}
             </main>
         </div>

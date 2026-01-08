@@ -24,7 +24,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onAnonymousLogin, isLoadin
                     {/* Header */}
                     <div className="bg-linear-to-r from-indigo-600 to-blue-600 px-4 md:px-6 py-6 md:py-8 text-center">
                         <h1 className="text-2xl md:text-3xl font-extrabold text-white mb-2">SpecFlow</h1>
-                        <p className="text-indigo-100 text-xs md:text-sm">Construction Decision Management</p>
+                        <p className="text-indigo-100 text-xs md:text-sm">Renovation Decision Management</p>
                     </div>
 
                     {/* Body */}
@@ -32,7 +32,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onAnonymousLogin, isLoadin
                         {/* Standard Login Section (Disabled) */}
                         <div className="mb-4 md:mb-6 pb-4 md:pb-6 border-b border-gray-200">
                             <h2 className="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 md:mb-4">
-                                Sign In (Coming Soon)
+                                Sign In
                             </h2>
 
                             {/* Email Field */}
@@ -118,7 +118,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onAnonymousLogin, isLoadin
 
                 {/* Additional Info */}
                 <div className="mt-4 md:mt-6 text-center text-white text-xs md:text-sm">
-                    <p>Get back to <a href="https://Ty.lerMiller.com">my homepage</a></p>
+                    <p>Get back to <a href="https://Ty.lerMiller.com">Ty.lerMiller.com</a></p>
                 </div>
             </div>
         </div>
