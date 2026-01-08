@@ -35,12 +35,14 @@ if (import.meta.env.DEV) {
                 console.log("Local Firebase: Using VITE_FIREBASE_CONFIG (Cloud connection intended).");
             }
         }
-    } catch (e) {
+    } 
+    
+    catch (e) {
         // If parsing fails, fall through to emulator setup.
         console.error("Local Firebase: Error parsing VITE_FIREBASE_CONFIG. Forcing Emulator Mode.", e);
         useEmulators = true;
     }
-    
+    console.log('VITE_FIREBASE_CONFIG:', import.meta.env.VITE_FIREBASE_CONFIG);
     // If we didn't validate a real cloud config, we default to the emulator setup.
     if (!isCloudConfigValid) {
         useEmulators = true;
