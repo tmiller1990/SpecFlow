@@ -18,6 +18,10 @@ import type { IProject, IDecisionCard, IOption, DecisionStatus } from './data/in
 
 const MOCK_PROJECT_ID = 'lake-house-addition';
 const MOCK_DECISION_ID = 'floor-selection-001'; // Explicit ID for the mock card
+const MOCK_BATH_PROJECT_ID = 'primary-bath-remodel';
+const MOCK_BATH_DECISION_ID = 'vanity-selection-001';
+const MOCK_SHOWER_DECISION_ID = 'shower-config-001';
+const MOCK_KITCHEN_DECISION_ID = 'backsplash-tile-001';
 
 /**
  * Constructs the base path for public data.
@@ -70,45 +74,130 @@ export const getDecisionDocRef = (projectId: string, cardId: string): DocumentRe
 // ======================================
 
 const MOCK_PROJECT_NAME = 'Lake House Addition';
+const MOCK_BATH_PROJECT_NAME = 'Primary Bath Remodel';
 
-const mockOptions: IOption[] = [
+const mockFlooringOptions: IOption[] = [
     {
         name: 'Standard Oak Flooring (Budget)',
         vendorLink: 'https://example.com/oak',
-        costImpact: 0, 
+        costImpact: 0,
     },
     {
         name: 'Wide-Plank Italian Walnut (+Upgrade)',
         vendorLink: 'https://example.com/walnut',
-        costImpact: 4500, 
+        costImpact: 4500,
     },
     {
         name: 'Polished Concrete (-Downgrade)',
         vendorLink: 'https://example.com/concrete',
-        costImpact: -1200, 
+        costImpact: -1200,
     },
 ];
 
-const mockProjectData = (ownerId: string): IProject => ({
-    id: MOCK_PROJECT_ID,
-    name: MOCK_PROJECT_NAME,
+const mockBacksplashOptions: IOption[] = [
+    {
+        name: 'White Subway Tile (Budget)',
+        vendorLink: 'https://example.com/subway',
+        costImpact: 0,
+    },
+    {
+        name: 'Natural Stone Mosaic (+Premium)',
+        vendorLink: 'https://example.com/stone-mosaic',
+        costImpact: 2800,
+    },
+    {
+        name: 'Glass Tile with Metal Accents (+Luxury)',
+        vendorLink: 'https://example.com/glass-tile',
+        costImpact: 4200,
+    },
+];
+
+const mockVanityOptions: IOption[] = [
+    {
+        name: '48" Oak Vanity with Quartz Top (Standard)',
+        vendorLink: 'https://example.com/oak-vanity',
+        costImpact: 0,
+    },
+    {
+        name: '60" White Shaker Vanity with Marble Top (+Upgrade)',
+        vendorLink: 'https://example.com/white-vanity',
+        costImpact: 2200,
+    },
+    {
+        name: '72" Custom Walnut Vanity with Granite Top (+Premium)',
+        vendorLink: 'https://example.com/walnut-vanity',
+        costImpact: 3800,
+    },
+];
+
+const mockShowerOptions: IOption[] = [
+    {
+        name: 'Standard Tub/Shower Combo (Budget)',
+        vendorLink: 'https://example.com/tub-shower',
+        costImpact: 0,
+    },
+    {
+        name: 'Walk-in Shower with Rain Head (+Upgrade)',
+        vendorLink: 'https://example.com/walk-in-shower',
+        costImpact: 3200,
+    },
+    {
+        name: 'Luxury Corner Shower with Steam (+Premium)',
+        vendorLink: 'https://example.com/corner-shower',
+        costImpact: 5800,
+    },
+];
+
+const mockProjectData = (ownerId: string, projectId: string, projectName: string, budget: number): IProject => ({
+    id: projectId,
+    name: projectName,
     ownerId: ownerId,
-    initialBudget: 100000,
-    runningCostDelta: 0, 
+    initialBudget: budget,
+    runningCostDelta: 0,
     members: {
-        [ownerId]: 'designer', 
-        'client-mock-uid': 'client', 
-        'gc-mock-uid': 'gc' 
+        [ownerId]: 'designer',
+        'client-mock-uid': 'client',
+        'gc-mock-uid': 'gc'
     }
 });
 
-const mockDecisionCard: Omit<IDecisionCard, 'id'> = {
+const mockLakeHouseProject = (ownerId: string): IProject => mockProjectData(ownerId, MOCK_PROJECT_ID, MOCK_PROJECT_NAME, 100000);
+const mockBathProject = (ownerId: string): IProject => mockProjectData(ownerId, MOCK_BATH_PROJECT_ID, MOCK_BATH_PROJECT_NAME, 25000);
+
+const mockFlooringCard: Omit<IDecisionCard, 'id'> = {
     projectId: MOCK_PROJECT_ID,
     roomId: 'Living Room',
     title: 'Flooring Material Selection',
     description: 'The client must choose between three flooring options for the main living area. The budget is based on the Standard Oak option.',
     status: 'Pending',
-    options: mockOptions,
+    options: mockFlooringOptions,
+};
+
+const mockBacksplashCard: Omit<IDecisionCard, 'id'> = {
+    projectId: MOCK_PROJECT_ID,
+    roomId: 'Kitchen',
+    title: 'Backsplash Tile Selection',
+    description: 'Choose the perfect backsplash tile to complement the kitchen cabinets and countertops.',
+    status: 'Pending',
+    options: mockBacksplashOptions,
+};
+
+const mockVanityCard: Omit<IDecisionCard, 'id'> = {
+    projectId: MOCK_BATH_PROJECT_ID,
+    roomId: 'Primary Bathroom',
+    title: 'Vanity Selection',
+    description: 'Select the vanity that best fits the bathroom layout and design aesthetic.',
+    status: 'Pending',
+    options: mockVanityOptions,
+};
+
+const mockShowerCard: Omit<IDecisionCard, 'id'> = {
+    projectId: MOCK_BATH_PROJECT_ID,
+    roomId: 'Primary Bathroom',
+    title: 'Shower Configuration',
+    description: 'Choose between a traditional tub/shower combo or modern shower-only options.',
+    status: 'Pending',
+    options: mockShowerOptions,
 };
 
 /**
@@ -120,24 +209,44 @@ export const ensureMockDataExists = async (currentUserId: string): Promise<void>
         return;
     }
 
-    const projectRef = getProjectDocRef(MOCK_PROJECT_ID);
-    const decisionRef = getDecisionDocRef(MOCK_PROJECT_ID, MOCK_DECISION_ID);
-    if (!projectRef || !decisionRef) return;
-
     try {
-        // Delete existing mock project to create fresh state
+        // Create Lake House project and decisions
+        const lakeHouseRef = getProjectDocRef(MOCK_PROJECT_ID);
+        const lakeHouseFlooringRef = getDecisionDocRef(MOCK_PROJECT_ID, MOCK_DECISION_ID);
+        const lakeHouseBacksplashRef = getDecisionDocRef(MOCK_PROJECT_ID, MOCK_KITCHEN_DECISION_ID);
+
+        // Create Bath Remodel project and decisions
+        const bathProjectRef = getProjectDocRef(MOCK_BATH_PROJECT_ID);
+        const bathVanityRef = getDecisionDocRef(MOCK_BATH_PROJECT_ID, MOCK_BATH_DECISION_ID);
+        const bathShowerRef = getDecisionDocRef(MOCK_BATH_PROJECT_ID, MOCK_SHOWER_DECISION_ID);
+
+        if (!lakeHouseRef || !lakeHouseFlooringRef || !lakeHouseBacksplashRef ||
+            !bathProjectRef || !bathVanityRef || !bathShowerRef) return;
+
+        // Delete existing mock projects to create fresh state
         try {
-            await deleteDoc(projectRef);
+            await deleteDoc(lakeHouseRef);
+            await deleteDoc(bathProjectRef);
         } catch {
-            // Project might not exist, that's fine
+            // Projects might not exist, that's fine
         }
 
-        // Create fresh project with current user
-        const projectData = mockProjectData(currentUserId);
-        await setDoc(projectRef, projectData as DocumentData);
+        // Create Lake House project with current user
+        const lakeHouseData = mockLakeHouseProject(currentUserId);
+        await setDoc(lakeHouseRef, lakeHouseData as DocumentData);
 
-        // Create decision card
-        await setDoc(decisionRef, mockDecisionCard as DocumentData);
+        // Create Lake House decision cards
+        await setDoc(lakeHouseFlooringRef, mockFlooringCard as DocumentData);
+        await setDoc(lakeHouseBacksplashRef, mockBacksplashCard as DocumentData);
+
+        // Create Bath Remodel project
+        const bathProjectData = mockBathProject(currentUserId);
+        await setDoc(bathProjectRef, bathProjectData as DocumentData);
+
+        // Create Bath Remodel decision cards
+        await setDoc(bathVanityRef, mockVanityCard as DocumentData);
+        await setDoc(bathShowerRef, mockShowerCard as DocumentData);
+
     } catch (error) {
         console.error('Firestore Seeder: Failed to create mock data:', error);
     }
